@@ -37,8 +37,6 @@ class MonitorBot < SlackRubyBot::Bot
     client = Slack::Web::Client.new
     @options["default_channel_id"] ||= Helpers.channel_to_id(@options["default_channel"])
 
-    binding.pry
-
     client.files_upload(
       channels: @options["default_channel_id"],
       filename: filename,

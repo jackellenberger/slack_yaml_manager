@@ -10,7 +10,7 @@ module Helpers
       @config ||= begin
         config = YAML.load_file('.config')
         # save api token to env to satisfy slack-ruby-bot
-        ENV["SLACK_API_TOKEN"] ||= config["slack_config"]["api_token"]
+        ENV["SLACK_API_TOKEN"] ||= config["slack_config"]["slack_api_token"]
         Slack.configure do |config|
           config.token = ENV["SLACK_API_TOKEN"]
         end

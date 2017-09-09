@@ -72,7 +72,7 @@ class RepoMonitor
         return {:path=>path, :diff=>diff, :sha=>sha, :author_name=>author_name, :author_email=>author_email, :date=>date}
       end
     rescue
-      error_msg = "Unable to get diff for path \"#{path}\" using git repo \"#{git.repo}\""
+      error_msg = "Unable to get diff for path \"#{path}\" using git repo \"#{git.repository}\""
       puts error_msg
 
       return {:error=>error_msg, :git=>git, :path=>path}
@@ -109,7 +109,7 @@ class RepoMonitor
     MonitorBot.initialize
     @recipients.each do |subscriber, changes|
       bad_paths = changes.select { |h| h.key?(:error) }
-      changes = changes - bad_paths
+      changes.delete(bad_paths)
       changes.each do |change|
         MonitorBot.send_snippet(
           "Changes to #{change[:path]}",
@@ -118,7 +118,7 @@ class RepoMonitor
         )
       end
       if bad_paths && !bad_paths.empty?
-        error_message = "Bit of bad news, here. Some of your paths aren't working as intended. The paths #{bad_paths.map {|e| e[:path]}} don't seem to exist.\n"
+        error_message = "Bit of bad news, here. Some of your paths aren't working as intended. The paths #{bad_paths} don't seem to exist.\n"
         MonitorBot.send_message(subscriber, error_message)
       end
     end
